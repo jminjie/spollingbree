@@ -50,5 +50,5 @@ def valid_letters(word):
 evaluator = WordPlausibilityEvaluator()
 evaluator.populate_dict('words_alpha.txt')
 
-app.run(port=8999, debug=True);
+app.run(port=8998, debug=True);
 
