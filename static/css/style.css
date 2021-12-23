@@ -1,0 +1,90 @@
+.hex {
+    float: left;
+    margin-right: -26px;
+    margin-bottom: -50px;
+}
+.hex .left {
+    float: left;
+    width: 0;
+    border-right: 30px solid lightgrey;
+    border-top: 52px solid transparent;
+    border-bottom: 52px solid transparent;
+}
+.hex .middle {
+    float: left;
+    width: 60px;
+    height: 104px;
+    background: lightgrey;
+    text-align: center;
+}
+.hex .right {
+    float: left;
+    width: 0;
+    border-left: 30px solid lightgrey;
+    border-top: 52px solid transparent;
+    border-bottom: 52px solid transparent;
+}
+
+.hex-gold .left {
+    width: 0;
+    border-right: 30px solid #ead61c;
+    border-top: 52px solid transparent;
+    border-bottom: 52px solid transparent;
+}
+.hex-gold .middle {
+    width: 60px;
+    height: 104px;
+    background: #ead61c;
+}
+.hex-gold .right {
+    width: 0;
+    border-left: 30px solid #ead61c;
+    border-top: 52px solid transparent;
+    border-bottom: 52px solid transparent;
+}
+
+.hex-row {
+    clear: left;
+}
+.hex.even {
+    margin-top: 53px;
+}
+
+.hide {
+    visibility: hidden;
+}
+
+body {
+    padding: 3em;
+}
+
+#scoreboard {
+    padding: 0px 0 0 500px;
+}
+
+#status{
+    margin: 20px 0 0 0;
+    padding: 0 0 0 110px;
+    width: 200px;
+    background: #ead61c;
+    border-radius: 5px;
+}
+
+button {
+    border-width: 1;
+    margin: 2px;
+}
+
+#letter1, #letter2, #letter3, #letter4, #letter5, #letter6 {
+    font-size: 20pt;
+    font-family: Arial;
+    text-transform: uppercase;
+    font-weight: bold
+}
+
+#mid_letter {
+    font-size: 20pt;
+    font-family: Arial;
+    text-transform: uppercase;
+    font-weight: bold
+}
