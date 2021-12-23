@@ -56,15 +56,32 @@
 
 body {
     padding: 3em;
+    width: 60%;
+    margin: auto;
 }
 
 #scoreboard {
-    padding: 0px 0 0 350px;
+    margin: 4em 0em 1em 0em;
+    padding: 1em 1em 1em 1em;
+    background: lightgrey;
+    border-radius: 10px;
+}
+
+#hive {
+}
+
+.column {
+    flex: 50%;
+    padding: 10px;
+}
+
+.row {
+    display: flex;
 }
 
 .status{
     margin: 20px 0 0 0;
-    padding: 0 0 0 110px;
+    padding: 3 0 3 110px;
     width: 200px;
     background: #ead61c;
     border-radius: 5px;
@@ -72,9 +89,10 @@ body {
 
 .status-red {
     margin: 20px 0 0 0;
-    padding: 0 0 0 110px;
+    padding: 3 0 3 110px;
     width: 200px;
-    background: red;
+    background: #434343;
+    color: white;
     border-radius: 5px;
 }
 
