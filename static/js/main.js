@@ -1,5 +1,6 @@
 function submitWord() {
     let wordToTry = $('#wordinput').val();
+    $('#wordinput').val('');
     console.log('trying', wordToTry);
 
     $.post("try/" + wordToTry,
@@ -11,8 +12,8 @@ function submitWord() {
             if (data == 'bad') {
                 updateStatus("Implausible", true);
             } else if (data == 'good') {
-                updateStatus("Plausible", false);
-                addWord(wordToTry);
+                updateStatus("Plausible word", false);
+                scoreWord(wordToTry);
             } else if (data == 'real') {
                 updateStatus("Actual word", true);
             } else if (data == 'wrong') {
@@ -21,36 +22,56 @@ function submitWord() {
         });
 }
 
-$( document ).ready(function() {
-   getLetters();
+$(document).ready(function() {
+    getLetters();
+    updateScoreboard();
+});
+
+$(document).on("keypress", function (e) {
+    if (e.keyCode == 13 || e.which == 13) {
+        submitWord();
+    } else if (e.keyCode == 32 || e.which == 32) {
+        shuffleHexagon();
+        $("#wordinput").blur();
+    } else {
+        $("#wordinput").focus();
+    }
 });
 
 
-function updateStatus(message, shake) {
-    if (shake) {
+function updateStatus(message, error) {
+    if (error) {
         $("#status" ).effect("shake");
+        $("#status" ).removeClass("status")
+        $("#status" ).addClass("status-red")
+    } else {
+        $("#status" ).removeClass("status-red")
+        $("#status" ).addClass("status")
     }
     $('#status').text(message);
 }
 
-var letters = 'xxxxxx'
+var savedLetters = null;
+
+function shuffleHexagon() {
+    if (savedLetters != null) {
+        refreshHexagon(savedLetters);
+    }
+}
 
 function getLetters() {
-    console.log('getting letters');
-
     $.get("letters",
         function(data, status){
             if (status != 'success') {
                 console.log('failed');
                 return;
             }
-            letters = data;
-            refreshHexagon(letters);
+            savedLetters = data;
+            refreshHexagon(savedLetters);
         });
 }
 
 function refreshHexagon(letters) {
-    console.log("the letters are", letters);
     $('#mid_letter').text(letters[0]);
 
     // shuffle the other letters
@@ -64,9 +85,24 @@ function refreshHexagon(letters) {
 var words = []
 var points = 0
 
-function addWord(word) {
-    $("#score").append('<li>' + word + '</li>');
+function scoreWord(word) {
+    $("#wordlist").append('<li>' + word + '</li>');
     points += word.length
+    updateScoreboard();
+}
+
+function updateScoreboard() {
+    if (points > 110) {
+        $("#rank").text('Oaf---Lummox---Picaroon---Fumbler---[[Blunderbuss]]');
+    } else if (points > 90) {
+        $("#rank").text('Oaf---Lummox---Picaroon---[[Fumbler]]---Blunderbuss');
+    } else if (points > 60) {
+        $("#rank").text('Oaf---Lummox---[[Picaroon]]---Fumbler---Blunderbuss');
+    } else if (points > 30) {
+        $("#rank").text('Oaf---[[Lummox]]---Picaroon---Fumbler---Blunderbuss');
+    } else {
+        $("#rank").text('[[Oaf]]---Lummox---Picaroon---Fumbler---Blunderbuss');
+    }
     $("#points").text(points)
 }
 

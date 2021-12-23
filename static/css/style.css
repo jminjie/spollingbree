@@ -59,14 +59,22 @@ body {
 }
 
 #scoreboard {
-    padding: 0px 0 0 500px;
+    padding: 0px 0 0 350px;
 }
 
-#status{
+.status{
     margin: 20px 0 0 0;
     padding: 0 0 0 110px;
     width: 200px;
     background: #ead61c;
+    border-radius: 5px;
+}
+
+.status-red {
+    margin: 20px 0 0 0;
+    padding: 0 0 0 110px;
+    width: 200px;
+    background: red;
     border-radius: 5px;
 }
 
