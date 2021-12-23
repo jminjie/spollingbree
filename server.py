@@ -24,7 +24,10 @@ def check_word(word):
     if evaluator.is_word(word):
         return 'real'
     elif evaluator.is_plausible(word):
-        return 'good'
+        if is_pangram(word):
+            return 'pangram'
+        else:
+            return 'good'
     else:
         return 'bad'
 
@@ -36,6 +39,12 @@ def get_letters():
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
             'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+def is_pangram(word):
+    for letter in LETTERS:
+        if letter not in word:
+            return False
+    return True
 
 def valid_letters(word):
     if LETTERS[0] not in word:

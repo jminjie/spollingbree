@@ -1,5 +1,8 @@
 function submitWord() {
     let wordToTry = $('#wordinput').val();
+    if (wordToTry.length < 4) {
+        return;
+    }
     $('#wordinput').val('');
     console.log('trying', wordToTry);
 
@@ -13,6 +16,9 @@ function submitWord() {
                 updateStatus("Implausible", true);
             } else if (data == 'good') {
                 updateStatus("Plausible word", false);
+                scoreWord(wordToTry);
+            } else if (data == 'pangram') {
+                updateStatus("Pangram!", false);
                 scoreWord(wordToTry);
             } else if (data == 'real') {
                 updateStatus("Actual word", true);
