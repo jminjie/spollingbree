@@ -1,12 +1,12 @@
 .hex {
     float: left;
-    margin-right: -26px;
-    margin-bottom: -50px;
+    margin-right: -20px;
+    margin-bottom: -44px;
 }
 .hex .left {
     float: left;
     width: 0;
-    border-right: 30px solid lightgrey;
+    border-right: 30px solid #DDDDDD;
     border-top: 52px solid transparent;
     border-bottom: 52px solid transparent;
 }
@@ -14,13 +14,13 @@
     float: left;
     width: 60px;
     height: 104px;
-    background: lightgrey;
+    background: #DDDDDD;
     text-align: center;
 }
 .hex .right {
     float: left;
     width: 0;
-    border-left: 30px solid lightgrey;
+    border-left: 30px solid #DDDDDD;
     border-top: 52px solid transparent;
     border-bottom: 52px solid transparent;
 }
@@ -58,16 +58,35 @@ body {
     padding: 3em;
     width: 60%;
     margin: auto;
+    font-family: "Trebuchet MS";
 }
 
 #scoreboard {
-    margin: 4em 0em 1em 0em;
+}
+
+#wordbox {
     padding: 1em 1em 1em 1em;
-    background: lightgrey;
+    border-radius: 10px;
+    border-style: solid;
+    border-width: thin;
+    border-color: #DDDDDD;
+    height: 330px;
+}
+
+#score {
+    padding: 1em 1em 1em 1em;
+}
+
+#rank {
+    text-align: center;
+    padding: 1em 0em 1em 0em;
+    background: #ead61c;
     border-radius: 10px;
 }
 
-#hive {
+#game {
+    text-align: center;
+    margin: 0 6em 0 0;
 }
 
 .column {
@@ -80,37 +99,71 @@ body {
 }
 
 .status{
-    margin: 20px 0 0 0;
-    padding: 3 0 3 110px;
-    width: 200px;
-    background: #ead61c;
+    width: 50%;
+    margin: auto;
+    padding: 8 0 8 0px;
     border-radius: 5px;
+    background: #ead61c;
+    visibility: hidden;
 }
 
-.status-red {
-    margin: 20px 0 0 0;
-    padding: 3 0 3 110px;
-    width: 200px;
+.status-bad {
     background: #434343;
     color: white;
-    border-radius: 5px;
+}
+
+.rankstatus{
+    width: 30px;
+    margin: auto;
+    font-size: 16pt;
+    visibility: hidden;
+    padding: 0 0 8px 0;
+}
+
+
+#hive {
+    padding 1px 1px 1px 1px;
+    height: 400px;
 }
 
 button {
     border-width: 1;
-    margin: 2px;
+    background: white;
+    border-radius: 30%;
+    padding: 1em 1em 1em 1em;
+    border-color: #DDDDDD;
+    border-style: solid;
 }
+
+button:active {
+    background: #DDDDDD;
+}
+
+a {
+    color: #ead61c;
+}
+
+#wordinput {
+    border-width: 0;
+    font-size: 17pt;
+    caret-color: #ead61c;
+    text-align: center;
+    padding: 10px 0 0 0;
+}
+
+#wordinput:focus{
+    outline: none;
+}
+
 
 #letter1, #letter2, #letter3, #letter4, #letter5, #letter6 {
     font-size: 20pt;
-    font-family: Arial;
     text-transform: uppercase;
-    font-weight: bold
+    font-weight: bold;
 }
 
 #mid_letter {
     font-size: 20pt;
-    font-family: Arial;
     text-transform: uppercase;
     font-weight: bold
 }

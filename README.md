@@ -1,6 +1,6 @@
-# Spooling Bee
+# Spolling Bee
 
-Spooling Bee is a version of the NYT Spelling Bee game that only accpets fake
+Spolling Bee is a version of the NYT Spelling Bee game that only accpets fake
 words that are plausible. Plausibility is rated by a simple statistical model
 trained on every English word.
 

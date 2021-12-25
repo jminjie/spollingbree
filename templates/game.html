@@ -1,7 +1,6 @@
-<input id="wordinput" type="word"></input>
-<button onclick="submitWord()" id="submit">Try</button>
-<button onclick="shuffleHexagon()" id="shuffle">Shuffle letters</button>
+<div id="game">
 <div id="status" class="status">Word status</div>
+<input id="wordinput" placeholder="Type a word" type="word"></input>
 <div id="hive">
     <div class="hex-row">
         <div class="hex hide"><div class="left"></div><div class="middle"></div><div class="right"></div></div>
@@ -18,4 +17,8 @@
         <div class="hex even"><div class="left"></div><div class="middle"><br><br><span id="letter5">X</span></div><div class="right"></div></div>
         <div class="hex"><div class="left"></div><div class="middle"><br><br><span id="letter6">X</span></div><div class="right"></div></div>
     </div>
+<br>
+</div>
+<button onclick="submitWord()" id="submit">Enter</button>
+<button onclick="shuffleHexagon()" id="shuffle"><i class="fas fa-sync-alt"></i></button>
 </div>

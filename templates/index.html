@@ -3,16 +3,19 @@
         <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static',filename='apple-touch-icon.png') }}">
         <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static',filename='favicon-32x32.png') }}">
         <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static',filename='favicon-16x16.png') }}">
+
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
-        <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <script src="{{ url_for('static', filename='js/confetti.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     </head>
-    <title>Spooling Bree</title>
-    <h1>Spooling Bree</h1>
-    <h4>(like the NYT Spelling Bee but only using plausible but fake words)</h4>
+    <title>Spolling Bree</title>
+    <h1>Spolling Bree</h1>
     <body>
+        <p>(like the <a href="https://www.nytimes.com/puzzles/spelling-bee">NYT Spelling Bee</a> except only using plausible but fake words)</p>
         <div class="row">
           <div class="column">
         {% include 'game.html' %}

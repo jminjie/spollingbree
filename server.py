@@ -9,7 +9,7 @@ from words import WordPlausibilityEvaluator
 
 app = Flask(__name__)
 
-LETTERS = 'raiclfy'
+LETTERS = 'icvtenz'
 
 @app.route('/', methods=['GET'])
 def root():

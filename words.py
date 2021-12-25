@@ -56,6 +56,7 @@ class WordPlausibilityEvaluator:
         if word[0] != '*' or word[-1] != '*':
             print('Word must begin and end with * character')
             return
+        # TODO: use the average score of the possible words given the letters
         return self.eval_word(word) > 50
 
     def is_word(self, word):
