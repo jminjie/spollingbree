@@ -7,10 +7,11 @@ import os
 import sys
 
 from words import WordPlausibilityEvaluator
+from dailyletters import getDailyLetters
 
 app = Flask(__name__)
 
-LETTERS = 'icvtenz'
+LETTERS = getDailyLetters().lower()
 
 @app.route('/', methods=['GET'])
 def root():
