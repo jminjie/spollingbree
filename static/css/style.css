@@ -91,8 +91,9 @@ footer p {
     border-style: solid;
     border-width: thin;
     border-color: #DDDDDD;
-    height: 330px;
+    height: 400px;
     color: #434343;
+
 }
 
 #score {
@@ -182,10 +183,22 @@ h2 {
 }
 
 ul {
-      list-style-type: none; /* Remove bullets */
-        padding: 0; /* Remove padding */
+    list-style-type: none;
+    padding: 0;
 
+    display: -ms-flexbox; /* IE 10 */
+    display: -webkit-flex; /* Safari 6.1+. iOS 7.1+ */
+    display: flex;
+    -webkit-flex-flow: wrap column; /* Safari 6.1+ */
+    flex-flow: wrap column;
+    max-height: 95%;
 
+    overflow: auto;
+    flex: 0 0 2em;
+}
+
+li {
+    padding: 3px 20px 0 0;
 }
 
 #hive {
