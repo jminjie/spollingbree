@@ -1,10 +1,14 @@
 import wget
-from datetime import datetime
+from datetime import datetime, timezone
+import pytz
 
 class DailyLetters:
     def __init__(self):
         self.__lastDownloadedFileName = ''
         self.__cachedLetters = ''
+
+        # dir for temp files
+        self.TEMP_DIR = 'temp'
 
         # dir for cached letters
         self.CACHED_LETTERS_FILE = 'temp/letters.txt'
@@ -13,14 +17,19 @@ class DailyLetters:
         self.DATE_FILE = 'temp/date.txt'
 
         # temp file which contains the name of the last downloaded NYT forum html file
-        self.LAST_DWONLOADED_FILE = 'temp/lastdownloaded.txt'
+        self.LAST_DOWNLOADED_FILE = 'temp/lastdownloaded.txt'
 
-    def __getDate(self):
-        now = datetime.now()
+    def getDate(self):
+        # the NYTSB Forum post is usually posted around 3 am ET (12 am PT)
+        # so to be safe we use date from Hawaii time (2 hours behind PT)
+        # this means that our letters won't update until 2 am PT but this should be fine
+        timezone = pytz.timezone('US/Hawaii')
+        now = datetime.now(timezone)
         return '{0}/{1}/{2}'.format(now.year, now.month, now.day)
 
     def __downloadFileIfNeeded(self):
-        date = self.__getDate()
+        date = self.getDate()
+        print(date)
         if self.__alreadyDownloadedToday(date):
             if self.__lastDownloadedFileName != '':
                 return self.__lastDownloadedFileName
@@ -32,7 +41,7 @@ class DailyLetters:
                     print('Expected to find cached filename but could not. Doing download.');
 
         url = 'https://www.nytimes.com/{}/crosswords/spelling-bee-forum.html'.format(date)
-        filename = wget.download(url, out='temp/')
+        filename = wget.download(url, out=self.TEMP_DIR)
         with open(self.DATE_FILE, 'w') as f:
             f.write(date);
 
@@ -40,11 +49,11 @@ class DailyLetters:
         return filename
 
     def __loadLastDownloadedFileName(self):
-        with open(self.LAST_DWONLOADED_FILE, 'r') as f:
+        with open(self.LAST_DOWNLOADED_FILE, 'r') as f:
             return f.read()
 
     def __saveLastDownloadedFileName(self, filename):
-        with open(self.LAST_DWONLOADED_FILE, 'w') as f:
+        with open(self.LAST_DOWNLOADED_FILE, 'w') as f:
             return f.write(filename)
 
     def __loadCachedLetters(self):
@@ -84,7 +93,7 @@ class DailyLetters:
         return letters
 
     def getDailyLetters(self):
-        if self.__alreadyDownloadedToday(self.__getDate()):
+        if self.__alreadyDownloadedToday(self.getDate()):
             if (self.__cachedLetters != ''):
                 print('Cache hit')
                 return self.__cachedLetters
