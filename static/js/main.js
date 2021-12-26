@@ -54,6 +54,7 @@ $(document).on('keypress', function (e) {
     if (e.keyCode == 13 || e.which == 13) {
         submitWord();
     } else if (e.keyCode == 32 || e.which == 32) {
+        e.preventDefault();
         shuffleHexagon();
         $('#wordinput').blur();
     } else {
