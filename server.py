@@ -4,6 +4,7 @@ from flask import jsonify
 from flask import render_template
 from flask import send_from_directory
 import os
+import sys
 
 from words import WordPlausibilityEvaluator
 
@@ -59,5 +60,8 @@ def valid_letters(word):
 evaluator = WordPlausibilityEvaluator()
 evaluator.populate_dict('words_alpha.txt')
 
-app.run(port=8998, debug=True);
+if len(sys.argv) >= 2 and sys.argv[1] == "debug":
+    app.run(port=8998, debug=True);
+else:
+    app.run(port=8998, debug=False);
 

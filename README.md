@@ -8,4 +8,4 @@ trained on every English word.
 Play the live demo at [bee.jminjie.com](https://bee.jminjie.com).
 
 ## Development
-To deploy at `localhost:8998`, run `python3 server.py`
+To deploy at `localhost:8998`, run `python3 server.py debug`
