@@ -6,12 +6,10 @@ from flask import send_from_directory
 import os
 import sys
 
-from words import WordPlausibilityEvaluator
-from dailyletters import getDailyLetters
+from plausiblewords import WordPlausibilityEvaluator
+from dailyletters import DailyLetters
 
 app = Flask(__name__)
-
-LETTERS = getDailyLetters().lower()
 
 @app.route('/', methods=['GET'])
 def root():
@@ -35,7 +33,7 @@ def check_word(word):
 
 @app.route('/letters', methods=['GET'])
 def get_letters():
-    return LETTERS
+    return dl.getDailyLetters()
 
 @app.route('/favicon.ico')
 def favicon():
@@ -43,26 +41,30 @@ def favicon():
             'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 def is_pangram(word):
-    for letter in LETTERS:
+    for letter in dl.getDailyLetters():
         if letter not in word:
             return False
     return True
 
 def valid_letters(word):
-    if LETTERS[0] not in word:
-        print(LETTERS[0], "not in word", word)
+    letters = dl.getDailyLetters()
+    if letters[0] not in word:
+        print(letters[0], "not in word", word)
         return False
     for letter in word:
-        if letter not in LETTERS:
-            print(letter, "not in LETTERS", LETTERS)
+        if letter not in letters:
+            print(letter, "not in letters", letters)
             return False
     return True
 
-evaluator = WordPlausibilityEvaluator()
-evaluator.populate_dict('words_alpha.txt')
+if __name__ == '__main__':
+    evaluator = WordPlausibilityEvaluator()
+    evaluator.populate_dict('words_alpha.txt')
+    dl = DailyLetters()
+    print('Starting server with letters: {}'.format(dl.getDailyLetters()))
 
-if len(sys.argv) >= 2 and sys.argv[1] == "debug":
-    app.run(port=8998, debug=True);
-else:
-    app.run(port=8998, debug=False);
+    if len(sys.argv) >= 2 and sys.argv[1] == "debug":
+        app.run(port=8998, debug=True);
+    else:
+        app.run(port=8998, debug=False);
 
