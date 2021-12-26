@@ -9,18 +9,23 @@ import logging
 
 from plausiblewords import WordPlausibilityEvaluator
 from dailyletters import DailyLetters
+from records import Records
 
 app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def root():
-    return render_template('index.html')
+    global totalAttempts
+    return render_template('index.html', totalAttempts=totalAttempts)
 
 @app.route('/try/<word>', methods=['POST'])
 def check_word(word):
+    global totalAttempts
+    totalAttempts += 1
+    records.saveRecord(Records.TOTAL_ATTEMPTS, totalAttempts)
+
     if not valid_letters(word):
         return 'wrong'
-
     word = '*' + word.lower() + '*'
     if evaluator.is_word(word):
         return 'real'
@@ -34,6 +39,7 @@ def check_word(word):
 
 @app.route('/letters', methods=['GET'])
 def get_letters():
+    global dl
     return dl.getDailyLetters().lower()
 
 @app.route('/favicon.ico')
@@ -61,7 +67,16 @@ if __name__ == '__main__':
 
     evaluator = WordPlausibilityEvaluator(app.logger)
     evaluator.populate_dict('words_alpha.txt')
+
     dl = DailyLetters(app.logger)
+
+    totalAttempts = 0
+    records = Records(app.logger)
+    try:
+        totalAttempts = records.loadRecord(Records.TOTAL_ATTEMPTS)
+    except FileNotFoundError:
+        records.saveRecord(Records.TOTAL_ATTEMPTS, totalAttempts)
+
     app.logger.info('Starting Spolling Bree server with letters: {}'.format(get_letters()))
 
     if len(sys.argv) >= 2 and sys.argv[1] == "debug":

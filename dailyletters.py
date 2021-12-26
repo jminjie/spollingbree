@@ -1,6 +1,7 @@
 import wget
 from datetime import datetime, timezone
 import pytz
+import os
 
 class DailyLetters:
     def __init__(self, logger):
@@ -40,6 +41,8 @@ class DailyLetters:
                 except FileNotFoundError:
                     self.logger.error('Expected to find cached filename but could not.');
 
+        if not os.path.exists(self.TEMP_DIR):
+                os.makedirs(self.TEMP_DIR)
         url = 'https://www.nytimes.com/{}/crosswords/spelling-bee-forum.html'.format(date)
         filename = wget.download(url, out=self.TEMP_DIR)
         with open(self.DATE_FILE, 'w') as f:
@@ -66,11 +69,14 @@ class DailyLetters:
 
 
     def __alreadyDownloadedToday(self, date):
-        with open(self.DATE_FILE, 'r') as f:
-            if f.read() == date:
-                return True
-            else:
-                return False
+        try:
+            with open(self.DATE_FILE, 'r') as f:
+                if f.read() == date:
+                    return True
+                else:
+                    return False
+        except FileNotFoundError:
+            return False
 
     def __getLettersFromFile(self, filename):
         MARKER = 'Center letter is in'
