@@ -45,20 +45,23 @@ function getPoints(word, pangram) {
 
 $(document).ready(function() {
     getLetters();
-    updateScoreboard();
+    setPoints();
+    setRankString(0);
+    setRankLine(0);
 });
 
-$(document).on("keypress", function (e) {
+$(document).on('keypress', function (e) {
     if (e.keyCode == 13 || e.which == 13) {
         submitWord();
     } else if (e.keyCode == 32 || e.which == 32) {
         shuffleHexagon();
-        $("#wordinput").blur();
+        $('#wordinput').blur();
     } else {
-        $("#wordinput").focus();
-        $('#wordinput').attr("placeholder", "");
+        $('#wordinput').focus();
+        $('#wordinput').attr('placeholder', '');
     }
 });
+
 
 function showRankUp() {
     $('.rankstatus').stop();
@@ -68,6 +71,7 @@ function showRankUp() {
         $('.rankstatus').css('opacity', '1');
         $('.rankstatus').css('visibility', 'hidden');
     });
+
 }
 
 function updateStatus(message, error) {
@@ -134,61 +138,95 @@ var points = 0;
 var numWords = 0;
 var allWords = []
 
-const RANK_NAMES = ['Oaf', 'Lummox', 'Picaroon', 'Fumbler', 'Blunderbuss'];
-const RANK_THRESHOLDS = [0, 15, 30, 45, 60]
+const RANK_NAMES = ['Beginner', 'Moving Down', 'Oaf', 'Lummox', 'Picaroon', 'Fumbler', 'Blunderbuss'];
+const RANK_THRESHOLDS = [0, 1, 15, 30, 45, 60, 75]
 
 function scoreWord(word, pangram) {
     $("#wordlist").append('<li>' + word + '</li>');
     allWords.push(word);
-    let additionalPoints = getPoints(word, pangram);
-    for (let i = 1; i < RANK_THRESHOLDS.length; i++) {
-        if (points < RANK_THRESHOLDS[i] && points+additionalPoints >= RANK_THRESHOLDS[i]) {
-            showRankUp();
-        }
-    }
 
-    let highestThreshold = RANK_THRESHOLDS[RANK_THRESHOLDS.length - 1];
-    if (points < highestThreshold && points+additionalPoints >= highestThreshold) {
-        console.log("Trigger fireworks!");
-        alert("Congratulations you've done it you absolute fool!!!");
-        setTimeout(function () {
-            console.log("Stop fireworks!");
-        }, 3000)
-    }
     points += getPoints(word, pangram);
     numWords += 1;
     updateScoreboard();
 }
 
-function formatRankName(rank) {
-    var formattedString=
-        ((rank == 0) ? '[[' + RANK_NAMES[0] + ']]' : RANK_NAMES[0]) + '---' +
-        ((rank == 1) ? '[[' + RANK_NAMES[1] + ']]' : RANK_NAMES[1]) + '---' +
-        ((rank == 2) ? '[[' + RANK_NAMES[2] + ']]' : RANK_NAMES[2]) + '---' +
-        ((rank == 3) ? '[[' + RANK_NAMES[3] + ']]' : RANK_NAMES[3]) + '---' +
-        ((rank == 4) ? '[[' + RANK_NAMES[4] + ']]' : RANK_NAMES[4]);
+function setRankString(rank) {
+    $("#rankstring").empty();
 
-    return formattedString;
+    for (var i = 0; i < RANK_NAMES.length; i++) {
+        var separatorSpan = $('<span />').addClass('separator_span').html(' &mdash; ');
+        var span = null;
+        if (i == rank) {
+            span = $('<span />').addClass('current_rank').html(RANK_NAMES[i]);
+        } else {
+            //span = $('<span />').addClass('other_rank').html(RANK_NAMES[i]);
+        }
+        $("#rankstring").append(span);
+    }
 }
 
-function updateScoreboard() {
-    if (points >= RANK_THRESHOLDS[4]) {
-        $("#rank").text(formatRankName(4));
-    } else if (points >= RANK_THRESHOLDS[3]) {
-        $("#rank").text(formatRankName(3));
-    } else if (points >= RANK_THRESHOLDS[2]) {
-        $("#rank").text(formatRankName(2));
-    } else if (points >= RANK_THRESHOLDS[1]) {
-        $("#rank").text(formatRankName(1));
-    } else if (points >= RANK_THRESHOLDS[0]) {
-        $("#rank").text(formatRankName(0));
+function setRankLine(rank) {
+    // left dots
+    $("#ldots").empty();
+    for (var i = 0; i < rank; i++) {
+        var dot = $('<i/>').addClass('fas fa-dot-circle');
+        $("#ldots").append(dot);
     }
+       
+    //right dots
+    $("#rdots").empty();
+    var nbsp = $('<span/>').html('&nbsp;');
+    $("#rdots").append(nbsp);
+    for (var i = 0; i < RANK_NAMES.length - (rank + 1); i++) {
+        var dot = $('<i/>').addClass('fas fa-dot-circle');
+        $("#rdots").append(dot);
+    }
+}
+
+function setPoints() {
     $("#points").text(points)
+}
+
+var prevPoints = 0;
+
+function updateScoreboard() {
+
     if (numWords != 1) {
         $("#numwords").text(numWords + " words")
     } else {
         $("#numwords").text(numWords + " word")
     }
+
+    var delayedSetPoints = false;
+
+    for (let i = 0; i < RANK_THRESHOLDS.length; i++) {
+        if (prevPoints <= RANK_THRESHOLDS[i] && points > RANK_THRESHOLDS[i]) {
+            delayedSetPoints = true;
+            $('#points').animate({'opacity': 0}, 300, function(){
+                setRankLine(i);
+                $('#points').animate({'opacity': 1}, 300);
+                setPoints();
+            });
+            $('#rankstring').animate({'opacity': 0}, 300, function(){
+                setRankString(i);
+                $('#rankstring').animate({'opacity': 1}, 300);
+            });
+            showRankUp();
+        }
+    }
+
+    if (!delayedSetPoints) {
+        setPoints();
+    }
+
+    let highestThreshold = RANK_THRESHOLDS[RANK_THRESHOLDS.length - 1];
+
+    if (prevPoints < highestThreshold && points >= highestThreshold) {
+        const jsConfetti = new JSConfetti();
+        jsConfetti.addConfetti();
+    }
+
+    prevPoints = points;
 }
 
 function shuffle(array) {

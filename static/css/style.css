@@ -1,7 +1,7 @@
 .hex {
     float: left;
     margin-right: -20px;
-    margin-bottom: -44px;
+    margin-bottom: -46px;
 }
 .hex .left {
     float: left;
@@ -47,21 +47,42 @@
     clear: left;
 }
 .hex.even {
-    margin-top: 53px;
+    margin-top: 57px;
 }
 
 .hide {
     visibility: hidden;
 }
 
-body {
-    padding: 3em;
-    width: 60%;
+.content {
+    padding: 2em;
+    width: 68%;
     margin: auto;
     font-family: "Trebuchet MS";
 }
 
 #scoreboard {
+    width: 400px;
+}
+
+footer {
+    background: #F8F8F8;
+    width: 100vw;
+    position: relative;
+    left: calc(-50vw + 50%);
+    color: #434343;
+}
+
+footer h1 {
+    font-size: 10pt;
+    padding: 0 0 10px 0;
+    text-transform: uppercase;
+    font-family: "Trebuchet MS";
+}
+
+footer p {
+    font-family: "Times New Roman";
+    font-size: 15pt;
 }
 
 #wordbox {
@@ -71,16 +92,52 @@ body {
     border-width: thin;
     border-color: #DDDDDD;
     height: 330px;
+    color: #434343;
 }
 
 #score {
-    padding: 1em 1em 1em 1em;
+    width: 400px;
 }
 
-#rank {
+#rdots {
+    font-size: 5pt;
+    color: #DDDDDD;
+    line-height: 25px;
+    letter-spacing: 30px;
+}
+
+#ldots {
+    font-size: 5pt;
+    color: #ead61c;
+    line-height: 25px;
+    letter-spacing: 30px;
+}
+
+h2 {
+    font-size: 10pt;
+    font-weight: normal;
+    color: #555555;
+}
+
+#description {
+    font-size: 12pt;
+    color: #555555;
+}
+
+#rankstring {
+    display: inline-block;
     text-align: center;
-    padding: 1em 0em 1em 0em;
-    background: #ead61c;
+    font-size: 10pt;
+    width: 100px;
+
+}
+
+#rankstringoutline {
+    padding: 4px 0px 4px 0px;
+    margin: 0 13px 0 0;
+    border-style: solid;
+    border-width: thin;
+    border-color: #DDDDDD;
     border-radius: 10px;
 }
 
@@ -120,10 +177,21 @@ body {
     padding: 0 0 8px 0;
 }
 
+#h1 {
+    padding: 1em 0 0 0;
+}
+
+ul {
+      list-style-type: none; /* Remove bullets */
+        padding: 0; /* Remove padding */
+
+
+}
 
 #hive {
-    padding 1px 1px 1px 1px;
     height: 400px;
+    width: 320px;
+    margin: auto;
 }
 
 button {
@@ -135,6 +203,20 @@ button {
     border-style: solid;
 }
 
+#points {
+    background: #ead61c;
+    width: 28px;
+    line-height: 28px;
+    display: inline-block;
+    text-align: center;
+    border-radius: 50%;
+    font-size: 9pt;
+}
+
+#gamebuttons {
+    padding: 1em;
+}
+
 button:active {
     background: #DDDDDD;
 }
@@ -143,12 +225,31 @@ a {
     color: #ead61c;
 }
 
+.current_rank {
+    font-weight: bold;
+}
+
+.other_rank {
+    color: #858545;
+}
+
 #wordinput {
     border-width: 0;
     font-size: 17pt;
     caret-color: #ead61c;
     text-align: center;
     padding: 10px 0 0 0;
+}
+
+hr {
+    width: 100vw;
+    position: relative;
+    left: calc(-50vw + 50%);
+    background: red;
+}
+
+#rankline {
+    padding: 1em 0em 1em 0em;
 }
 
 #wordinput:focus{
