@@ -3,9 +3,10 @@ from datetime import datetime, timezone
 import pytz
 
 class DailyLetters:
-    def __init__(self):
+    def __init__(self, logger):
         self.__lastDownloadedFileName = ''
         self.__cachedLetters = ''
+        self.logger = logger
 
         # dir for temp files
         self.TEMP_DIR = 'temp'
@@ -29,7 +30,6 @@ class DailyLetters:
 
     def __downloadFileIfNeeded(self):
         date = self.getDate()
-        print(date)
         if self.__alreadyDownloadedToday(date):
             if self.__lastDownloadedFileName != '':
                 return self.__lastDownloadedFileName
@@ -38,7 +38,7 @@ class DailyLetters:
                     self.__lastDownloadedFileName = self.__loadLastDownloadedFileName()
                     return self.__lastDownloadedFileName
                 except FileNotFoundError:
-                    print('Expected to find cached filename but could not. Doing download.');
+                    self.logger.error('Expected to find cached filename but could not.');
 
         url = 'https://www.nytimes.com/{}/crosswords/spelling-bee-forum.html'.format(date)
         filename = wget.download(url, out=self.TEMP_DIR)
@@ -95,14 +95,13 @@ class DailyLetters:
     def getDailyLetters(self):
         if self.__alreadyDownloadedToday(self.getDate()):
             if (self.__cachedLetters != ''):
-                print('Cache hit')
                 return self.__cachedLetters
             else:
-                print('Cache miss')
+                self.logger.warning('Cache miss in getDailyLetters')
                 try:
                     self.__cachedLetters = self.__loadCachedLetters()
                     return self.__cachedLetters
                 except FileNotFoundError:
-                    print('Expected to find cached letters but could not. Doing download.');
+                    self.logger.error('Expected to find cached letters but could not.');
 
         return self.__getLettersFromFile(self.__downloadFileIfNeeded())

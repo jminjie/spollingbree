@@ -1,10 +1,11 @@
 # Used to evaulate the plausibilitiy of a word based on its spelling
 class WordPlausibilityEvaluator:
-    def __init__(self):
+    def __init__(self, logger):
             self.trigram_dictionary = {}
             # normalization for long words
             self.lamda = 5;
             self.all_words = set()
+            self.logger = logger
 
             # unused
             self.AVERAGE_TRIGRAM_COUNT = 350

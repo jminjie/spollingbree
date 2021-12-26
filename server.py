@@ -5,6 +5,7 @@ from flask import render_template
 from flask import send_from_directory
 import os
 import sys
+import logging
 
 from plausiblewords import WordPlausibilityEvaluator
 from dailyletters import DailyLetters
@@ -33,7 +34,7 @@ def check_word(word):
 
 @app.route('/letters', methods=['GET'])
 def get_letters():
-    return dl.getDailyLetters()
+    return dl.getDailyLetters().lower()
 
 @app.route('/favicon.ico')
 def favicon():
@@ -41,27 +42,27 @@ def favicon():
             'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 def is_pangram(word):
-    for letter in dl.getDailyLetters():
+    for letter in get_letters():
         if letter not in word:
             return False
     return True
 
 def valid_letters(word):
-    letters = dl.getDailyLetters()
+    letters = get_letters()
     if letters[0] not in word:
-        print(letters[0], "not in word", word)
         return False
     for letter in word:
         if letter not in letters:
-            print(letter, "not in letters", letters)
             return False
     return True
 
 if __name__ == '__main__':
-    evaluator = WordPlausibilityEvaluator()
+    logging.basicConfig(level=logging.DEBUG)
+
+    evaluator = WordPlausibilityEvaluator(app.logger)
     evaluator.populate_dict('words_alpha.txt')
-    dl = DailyLetters()
-    print('Starting server with letters: {}'.format(dl.getDailyLetters()))
+    dl = DailyLetters(app.logger)
+    app.logger.info('Starting Spolling Bree server with letters: {}'.format(get_letters()))
 
     if len(sys.argv) >= 2 and sys.argv[1] == "debug":
         app.run(port=8998, debug=True);
