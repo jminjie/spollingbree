@@ -31,6 +31,8 @@ print('score for *atatata*', evaluator.eval_word('*atatata*'))
 print('score for *atatatatat*', evaluator.eval_word('*atatatatat*'))
 print('score for *atatatatatat*', evaluator.eval_word('*atatatatatat*'))
 print('score for *lyly*', evaluator.eval_word('*lyly*'))
+print('score for *royall*', evaluator.eval_word('*royall*'))
+print('score for *layor*', evaluator.eval_word('*layor*'))
 
 print('*axax*', evaluator.is_plausible('*axax*'))
 print('*butt*', evaluator.is_plausible('*burt*'))
