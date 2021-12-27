@@ -1,4 +1,5 @@
 from dailyletters import DailyLetters
+import logging
 
-dl = DailyLetters()
+dl = DailyLetters(logging)
 print(dl.getDate())

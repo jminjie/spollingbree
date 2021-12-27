@@ -1,6 +1,7 @@
-from words import WordPlausibilityEvaluator
+from plausiblewords import WordPlausibilityEvaluator
+import logging
 
-evaluator = WordPlausibilityEvaluator()
+evaluator = WordPlausibilityEvaluator(logging)
 evaluator.populate_dict('words_alpha.txt')
 
 def print_implausible_word(num=100):
@@ -29,6 +30,7 @@ print('score for *atata*', evaluator.eval_word('*atata*'))
 print('score for *atatata*', evaluator.eval_word('*atatata*'))
 print('score for *atatatatat*', evaluator.eval_word('*atatatatat*'))
 print('score for *atatatatatat*', evaluator.eval_word('*atatatatatat*'))
+print('score for *lyly*', evaluator.eval_word('*lyly*'))
 
 print('*axax*', evaluator.is_plausible('*axax*'))
 print('*butt*', evaluator.is_plausible('*burt*'))
@@ -41,6 +43,7 @@ print('*atata*', evaluator.is_plausible('*atata*'))
 print('*atatata*', evaluator.is_plausible('*atatata*'))
 print('*atatatatat*', evaluator.is_plausible('*atatatatat*'))
 print('*atatatatatat*', evaluator.is_plausible('*atatatatatat*'))
+print('*lyly*', evaluator.is_plausible('*lyly*'))
 
 assert(evaluator.is_plausible('*jonging*'))
 assert(evaluator.is_plausible('*clogged*'))
