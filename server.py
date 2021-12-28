@@ -6,6 +6,7 @@ from flask import send_from_directory
 import os
 import sys
 import logging
+import atexit
 
 from plausiblewords import WordPlausibilityEvaluator
 from dailyletters import DailyLetters
@@ -15,21 +16,21 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def root():
-    global totalAttempts
-    return render_template('index.html', totalAttempts=totalAttempts)
+    return render_template('index.html', totalPlausibleWords=totalPlausibleWords)
 
 @app.route('/try/<word>', methods=['POST'])
 def check_word(word):
-    global totalAttempts
-    totalAttempts += 1
-    records.saveRecord(Records.TOTAL_ATTEMPTS, totalAttempts)
+    global totalPlausibleWords, totalAttempts
 
+    totalAttempts += 1
     if not valid_letters(word):
         return 'wrong'
     word = '*' + word.lower() + '*'
     if evaluator.is_word(word):
         return 'real'
     elif evaluator.is_plausible(word):
+        totalPlausibleWords += 1
+
         if is_pangram(word):
             return 'pangram'
         else:
@@ -39,7 +40,6 @@ def check_word(word):
 
 @app.route('/letters', methods=['GET'])
 def get_letters():
-    global dl
     return dl.getDailyLetters().lower()
 
 @app.route('/favicon.ico')
@@ -62,6 +62,21 @@ def valid_letters(word):
             return False
     return True
 
+def save_records_on_exit():
+    global totalPlausibleWords, totalAttempts
+    records.saveRecord(Records.TOTAL_PLAUSIBLE, totalPlausibleWords)
+    records.saveRecord(Records.TOTAL_ATTEMPTS, totalAttempts)
+    atexit.unregister(save_records_on_exit)
+    app.logger.info('Records saved on exit.')
+
+
+def init_record(initialVal, recordName):
+    try:
+        return records.loadRecord(recordName)
+    except FileNotFoundError:
+        records.saveRecord(Records.TOTAL_PLAUSIBLE, initialVal)
+        return initialVal
+
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
 
@@ -70,17 +85,16 @@ if __name__ == '__main__':
 
     dl = DailyLetters(app.logger)
 
-    totalAttempts = 0
     records = Records(app.logger)
-    try:
-        totalAttempts = records.loadRecord(Records.TOTAL_ATTEMPTS)
-    except FileNotFoundError:
-        records.saveRecord(Records.TOTAL_ATTEMPTS, totalAttempts)
+    global totalPlausibleWords, totalAttempts
+    totalPlausibleWords = init_record(0, Records.TOTAL_PLAUSIBLE);
+    totalAttempts = init_record(0, Records.TOTAL_ATTEMPTS)
+    atexit.register(save_records_on_exit)
 
     app.logger.info('Starting Spolling Bree server with letters: {}'.format(get_letters()))
 
     if len(sys.argv) >= 2 and sys.argv[1] == "debug":
-        app.run(port=8998, debug=True);
+        app.run(port=8998, debug=True, use_reloader=False);
     else:
         app.run(port=8998, debug=False);
 

@@ -1,6 +1,7 @@
 import os
 
 class Records:
+    TOTAL_PLAUSIBLE = 'totalplausible.txt'
     TOTAL_ATTEMPTS = 'totalattempts.txt'
 
     def __init__(self, logger):

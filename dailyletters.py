@@ -43,6 +43,7 @@ class DailyLetters:
 
         if not os.path.exists(self.TEMP_DIR):
                 os.makedirs(self.TEMP_DIR)
+        self.logger.warning('Disk cache miss in getDailyLetters, downloading.')
         url = 'https://www.nytimes.com/{}/crosswords/spelling-bee-forum.html'.format(date)
         filename = wget.download(url, out=self.TEMP_DIR)
         with open(self.DATE_FILE, 'w') as f:
@@ -103,7 +104,7 @@ class DailyLetters:
             if (self.__cachedLetters != ''):
                 return self.__cachedLetters
             else:
-                self.logger.warning('Cache miss in getDailyLetters')
+                self.logger.warning('Memory cache miss in getDailyLetters')
                 try:
                     self.__cachedLetters = self.__loadCachedLetters()
                     return self.__cachedLetters
