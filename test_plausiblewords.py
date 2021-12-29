@@ -14,45 +14,40 @@ def print_implausible_word(num=100):
             # min of 4 letter word plus two word boundaries
             if len(line) >= 6:
                 if not evaluator.is_plausible(line):
-                    print(line)
+                    print(line, evaluator.eval_word(line))
 
 print('average score of alpha', evaluator.get_average_score('words_alpha.txt'))
 print('average score of 20k', evaluator.get_average_score('20k.txt'))
 
-print('score for *axax*', evaluator.eval_word('*axax*'))
-print('score for *butt*', evaluator.eval_word('*burt*'))
-print('score for *jokging*', evaluator.eval_word('*jokging*'))
-print('score for *jonging*', evaluator.eval_word('*jonging*'))
-print('score for *brog*', evaluator.eval_word('*brog*'))
-print('score for *stillington*', evaluator.eval_word('*stillington*'))
-print('score for *clogged*', evaluator.eval_word('*clogged*'))
-print('score for *atata*', evaluator.eval_word('*atata*'))
-print('score for *atatata*', evaluator.eval_word('*atatata*'))
-print('score for *atatatatat*', evaluator.eval_word('*atatatatat*'))
-print('score for *atatatatatat*', evaluator.eval_word('*atatatatatat*'))
-print('score for *lyly*', evaluator.eval_word('*lyly*'))
-print('score for *royall*', evaluator.eval_word('*royall*'))
-print('score for *layor*', evaluator.eval_word('*layor*'))
+def print_and_eval(word):
+    word_with_boundaries = '*' + word + '*'
+    print('score for *{0}*: {1} - {2}'.format(word,
+        evaluator.eval_word(word_with_boundaries),
+        'plausible' if evaluator.is_plausible(word_with_boundaries) else 'no'))
 
-print('*axax*', evaluator.is_plausible('*axax*'))
-print('*butt*', evaluator.is_plausible('*burt*'))
-print('*jokging*', evaluator.is_plausible('*jokging*'))
-print('*jonging*', evaluator.is_plausible('*jonging*'))
-print('*brog*', evaluator.is_plausible('*brog*'))
-print('*stillington*', evaluator.is_plausible('*stillington*'))
-print('*clogged*', evaluator.is_plausible('*clogged*'))
-print('*atata*', evaluator.is_plausible('*atata*'))
-print('*atatata*', evaluator.is_plausible('*atatata*'))
-print('*atatatatat*', evaluator.is_plausible('*atatatatat*'))
-print('*atatatatatat*', evaluator.is_plausible('*atatatatatat*'))
-print('*lyly*', evaluator.is_plausible('*lyly*'))
+print_implausible_word(50)
+
+print_and_eval("axax")
+print_and_eval("butt")
+print_and_eval("jokging")
+print_and_eval("jonging")
+print_and_eval("brog")
+print_and_eval("stillington")
+print_and_eval("clogged")
+print_and_eval("atata")
+print_and_eval("atatata")
+print_and_eval("atatatatat")
+print_and_eval("atatatatatat")
+print_and_eval("lyly")
+print_and_eval("royall")
+print_and_eval("layor")
+print_and_eval("tryng")
+print_and_eval("riyng")
 
 assert(evaluator.is_plausible('*jonging*'))
-assert(evaluator.is_plausible('*clogged*'))
 assert(not evaluator.is_plausible('*atatata*'))
 assert(not evaluator.is_plausible('*atatatata*'))
 assert(not evaluator.is_plausible('*atatatatata*'))
-
 
 assert(evaluator.is_word('*stupid*'))
 assert(evaluator.is_word('*jogging*'))

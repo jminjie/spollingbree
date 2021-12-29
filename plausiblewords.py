@@ -1,15 +1,18 @@
+import math
+
 # Used to evaulate the plausibilitiy of a word based on its spelling
 class WordPlausibilityEvaluator:
     def __init__(self, logger):
-            self.trigram_dictionary = {}
-            # normalization for long words
-            self.lamda = 5;
-            self.all_words = set()
-            self.logger = logger
+        self.trigram_dictionary = {}
+        # penalty for long words
+        self.lamda = 3.5
+        self.cap = 0.6
+        self.all_words = set()
+        self.logger = logger
 
-            # unused
-            self.AVERAGE_TRIGRAM_COUNT = 350
-            self.BAD_TRIGRAM_PENALTY = 1000000
+        # unused
+        self.AVERAGE_TRIGRAM_COUNT = 350
+        self.BAD_TRIGRAM_PENALTY = 1000000
 
     def add_to_dict(self, word):
         if word[0] != '*' or word[-1] != '*':
@@ -36,6 +39,17 @@ class WordPlausibilityEvaluator:
                 # min of 4 letter word plus two word boundaries
                 if len(line) >= 6:
                     self.add_to_dict(line)
+        self.normalize()
+
+    def normalize(self):
+        maxCount = 0
+        for key in self.trigram_dictionary.keys():
+            if self.trigram_dictionary[key] > maxCount:
+                maxCount = self.trigram_dictionary[key]
+
+        # scale to between 0-1, then cap to max value
+        for key in self.trigram_dictionary.keys():
+            self.trigram_dictionary[key] = min(self.cap, (self.trigram_dictionary[key] / maxCount))
 
     def eval_word(self, word):
         if word[0] != '*' or word[-1] != '*':
@@ -49,16 +63,16 @@ class WordPlausibilityEvaluator:
             if trigram in self.trigram_dictionary.keys():
                 score += self.trigram_dictionary[trigram]
             else:
-                return 0
+                return -100
             i += 1
-        return score / (self.lamda * pow(numChars, 2))
+        return score / (self.lamda * pow(max(numChars - 5, 1), 1.7))
 
     def is_plausible(self, word):
         if word[0] != '*' or word[-1] != '*':
             print('Word must begin and end with * character')
             return
         # TODO: use the average score of the possible words given the letters
-        return self.eval_word(word) > 50
+        return self.eval_word(word) > 0.03
 
     def is_word(self, word):
         if word[0] != '*' or word[-1] != '*':

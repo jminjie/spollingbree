@@ -261,8 +261,47 @@ hr {
     background: red;
 }
 
+#date {
+    padding: 0px 0px 0px 14px;
+    font-size: 26px;
+    position: relative;
+    bottom: 9px;
+
+}
+
+.info-overlay {
+    font-family: "Trebuchet MS";
+    background: #fff;
+    z-index: 20;
+    line-height: 20px;
+    border-radius: 6px;
+    position:fixed;
+    width: 350px;
+    height: 350px;
+    top: 50%;
+    left: 50%;
+    margin-left: -175px; /* Negative half of width. */
+    margin-top: -195px; /* Negative half of height. */
+    font-size: 16px;
+    line-height: 24px;
+
+    padding: 20px 40px 20px 40px;
+
+    box-shadow: 0 0 0 1500px rgba(0, 0, 0, .5);
+    .close-info {
+        cursor: pointer;
+        text-align: center;
+        margin: auto;
+    }
+}
+
+.d-none {
+    display: none;
+}
+
 #rankline {
     padding: 1em 0em 1em 0em;
+    cursor: pointer;
 }
 
 #wordinput:focus{

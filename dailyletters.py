@@ -1,7 +1,8 @@
-import wget
 from datetime import datetime, timezone
+import wget
 import pytz
 import os
+import calendar
 
 class DailyLetters:
     def __init__(self, logger):
@@ -28,6 +29,11 @@ class DailyLetters:
         timezone = pytz.timezone('US/Hawaii')
         now = datetime.now(timezone)
         return '{0}/{1}/{2}'.format(now.year, now.month, now.day)
+
+    def getDisplayDate(self):
+        timezone = pytz.timezone('US/Hawaii')
+        now = datetime.now(timezone)
+        return '{0} {1}, {2}'.format(calendar.month_name[now.month], now.day, now.year)
 
     def __downloadFileIfNeeded(self):
         date = self.getDate()

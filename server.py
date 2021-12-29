@@ -16,7 +16,8 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def root():
-    return render_template('index.html', totalPlausibleWords=totalPlausibleWords)
+    return render_template('index.html', totalPlausibleWords=totalPlausibleWords,
+            displayDate = dl.getDisplayDate())
 
 @app.route('/try/<word>', methods=['POST'])
 def check_word(word):
@@ -94,7 +95,9 @@ if __name__ == '__main__':
     app.logger.info('Starting Spolling Bree server with letters: {}'.format(get_letters()))
 
     if len(sys.argv) >= 2 and sys.argv[1] == "debug":
+        # when using reloader the atexit hook runs twice and overwrites itself
         app.run(port=8998, debug=True, use_reloader=False);
     else:
+        # automatically no reloader if debug=False
         app.run(port=8998, debug=False);
 

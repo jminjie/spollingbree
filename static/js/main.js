@@ -48,7 +48,16 @@ $(document).ready(function() {
     setPoints();
     setRankString(0);
     setRankLine(0);
+    $("#rankline").click(function() {
+        console.log('clicked rankline')
+        document.querySelector('.info-overlay').classList.remove('d-none');
+    });
+
 });
+
+function closeInfo() {
+    document.querySelector('.info-overlay').classList.add('d-none');
+}
 
 $(document).on('keypress', function (e) {
     if (e.keyCode == 13 || e.which == 13) {
@@ -247,4 +256,3 @@ function shuffle(array) {
 
   return array;
 }
-
