@@ -45,14 +45,6 @@ function getPoints(word, pangram) {
 
 $(document).ready(function() {
     getLetters();
-    setPoints();
-    setRankString(0);
-    setRankLine(0);
-    $("#rankline").click(function() {
-        console.log('clicked rankline')
-        document.querySelector('.info-overlay').classList.remove('d-none');
-    });
-
 });
 
 function closeInfo() {
@@ -128,7 +120,25 @@ function getLetters() {
                 return;
             }
             savedLetters = data;
+
+            loadWords(savedLetters);
+            loadPoints(savedLetters);
+
             refreshHexagon(savedLetters);
+
+            setPoints();
+            setRankString(0);
+            setRankLine(0);
+            for (let i = 0; i < allWords.length; i++) {
+                $("#wordlist").append('<li>' + allWords[i] + '</li>');
+            }
+            updateScoreboard();
+
+            $("#rankline").click(function() {
+                console.log('clicked rankline')
+                document.querySelector('.info-overlay').classList.remove('d-none');
+            });
+
         });
 }
 
@@ -143,13 +153,61 @@ function refreshHexagon(letters) {
     }
 }
 
-var words = [];
 var points = 0;
 var numWords = 0;
 var allWords = []
 
 const RANK_NAMES = ['Beginner', 'Moving Down', 'Oaf', 'Lummox', 'Picaroon', 'Fumbler', 'Blunderbuss'];
 const RANK_THRESHOLDS = [0, 1, 15, 30, 45, 60, 75]
+
+window.onbeforeunload = function(){
+    saveCookies()
+};
+
+
+function loadWords(lettersKey) {
+    if (document.cookie.indexOf(lettersKey + "words=") < 0) {
+        return;
+    } else {
+        let words = readCookie(lettersKey + "words").split(',')
+        for (let i = 0; i < words.length; i++) {
+            if (words[i] != '') {
+                allWords.push(words[i]);
+            }
+        }
+        numWords = allWords.length;
+    }
+}
+
+function loadPoints(lettersKey) {
+    if (document.cookie.indexOf(lettersKey + "points=") < 0) {
+        return;
+    } else {
+        let p = readCookie(lettersKey + "points");
+        points = parseInt(p)
+    }
+}
+
+function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+
+
+function saveCookies() {
+    var words = "";
+    for (let i = 0; i < allWords.length; i++) {
+        words += allWords[i] + ',';
+    }
+    document.cookie = savedLetters + "words=" + words + ";";
+    document.cookie = savedLetters + "points=" + points + ";";
+}
 
 function scoreWord(word, pangram) {
     $("#wordlist").append('<li>' + word + '</li>');
@@ -158,6 +216,7 @@ function scoreWord(word, pangram) {
     points += getPoints(word, pangram);
     numWords += 1;
     updateScoreboard();
+
 }
 
 function setRankString(rank) {
@@ -192,6 +251,7 @@ function setRankLine(rank) {
         $("#rdots").append(dot);
     }
 }
+
 
 function setPoints() {
     $("#points").text(points)
