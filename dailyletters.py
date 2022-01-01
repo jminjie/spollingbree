@@ -28,7 +28,7 @@ class DailyLetters:
         # this means that our letters won't update until 2 am PT but this should be fine
         timezone = pytz.timezone('US/Hawaii')
         now = datetime.now(timezone)
-        return '{0}/{1}/{2}'.format(now.year, now.month, now.day)
+        return '{:0>2d}/{:0>2d}/{:0>2d}'.format(now.year, now.month, now.day)
 
     def getDisplayDate(self):
         timezone = pytz.timezone('US/Hawaii')
@@ -51,6 +51,7 @@ class DailyLetters:
                 os.makedirs(self.TEMP_DIR)
         self.logger.warning('Disk cache miss in getDailyLetters, downloading.')
         url = 'https://www.nytimes.com/{}/crosswords/spelling-bee-forum.html'.format(date)
+        self.logger.warning('Attempting download from {}'.format(url))
         filename = wget.download(url, out=self.TEMP_DIR)
         with open(self.DATE_FILE, 'w') as f:
             f.write(date);
