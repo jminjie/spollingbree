@@ -43,6 +43,7 @@ print_and_eval("royall")
 print_and_eval("layor")
 print_and_eval("tryng")
 print_and_eval("riyng")
+print_and_eval("crommy")
 
 assert(evaluator.is_plausible('*jonging*'))
 assert(not evaluator.is_plausible('*atatata*'))

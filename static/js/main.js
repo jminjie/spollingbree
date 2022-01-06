@@ -291,7 +291,7 @@ function updateScoreboard() {
 
     let highestThreshold = RANK_THRESHOLDS[RANK_THRESHOLDS.length - 1];
 
-    if (prevPoints < highestThreshold && points >= highestThreshold) {
+    if (prevPoints <= highestThreshold && points > highestThreshold) {
         const jsConfetti = new JSConfetti();
         jsConfetti.addConfetti();
     }
