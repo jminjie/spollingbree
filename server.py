@@ -9,6 +9,7 @@ import logging
 import atexit
 
 from plausiblewords import WordPlausibilityEvaluator
+from rnn_plausiblewords import RnnWordPlausibilityEvaluator
 from dailyletters import DailyLetters
 from records import Records
 
@@ -29,7 +30,7 @@ def check_word(word):
     word = '*' + word.lower() + '*'
     if evaluator.is_word(word):
         return 'real'
-    elif evaluator.is_plausible(word):
+    elif rnn_evaluator.is_plausible(word):
         totalPlausibleWords += 1
 
         if is_pangram(word):
@@ -83,6 +84,7 @@ if __name__ == '__main__':
 
     evaluator = WordPlausibilityEvaluator(app.logger)
     evaluator.populate_dict('words_alpha.txt')
+    rnn_evaluator = RnnWordPlausibilityEvaluator(app.logger)
 
     dl = DailyLetters(app.logger)
 

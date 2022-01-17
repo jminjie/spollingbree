@@ -83,11 +83,9 @@ class RnnWordPlausibilityEvaluator:
 
         # check the log probability of '*' given current state
         probability = self.probability_of_letter(predicted_logits, '*')
+
         # TODO This assumes that the probability of the word is the product of
         # the probability of each letter.
-        # The problem is that I'm not really training the RNN to generate
-        # probabilities for each letter. In other words the log likelihoods in
-        # the logits is not real, just directionally correct
         total_prob += probability
         if show_work:
             print("Probability of * =", probability)
