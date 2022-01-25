@@ -30,7 +30,7 @@ def check_word(word):
     starword = '*' + word.lower() + '*'
     if evaluator.is_word(starword):
         return 'real'
-    elif rnn_evaluator.is_plausible(word, True):
+    elif rnn_evaluator.is_plausible(word):
         totalPlausibleWords += 1
 
         if is_pangram(word):
