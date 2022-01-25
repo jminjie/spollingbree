@@ -5,7 +5,7 @@ import tensorflow as tf
 class RnnGRUModel(tf.keras.Model):
     def __init__(self):
         super().__init__(self)
-        self.vocab_size = 28
+        self.vocab_size = 29
         self.embedding_dim = 256
         self.rnn_units = 1024
 

@@ -27,10 +27,10 @@ def check_word(word):
     totalAttempts += 1
     if not valid_letters(word):
         return 'wrong'
-    word = '*' + word.lower() + '*'
-    if evaluator.is_word(word):
+    starword = '*' + word.lower() + '*'
+    if evaluator.is_word(starword):
         return 'real'
-    elif rnn_evaluator.is_plausible(word):
+    elif rnn_evaluator.is_plausible(word, True):
         totalPlausibleWords += 1
 
         if is_pangram(word):
