@@ -10,8 +10,8 @@ import math
 class RnnWordPlausibilityEvaluator:
     def __init__(self, logger,
             model=None,
-            ids_from_chars=tf.keras.models.load_model('ids_from_chars'),
-            chars_from_ids=tf.keras.models.load_model('chars_from_ids'),
+            ids_from_chars=None,
+            chars_from_ids=None,
             temperature=0.5):
         self.logger = logger
         self.ids_from_chars = ids_from_chars
@@ -23,6 +23,11 @@ class RnnWordPlausibilityEvaluator:
             # load the saved weights
             self.model = RnnGRUModel()
             self.model.load_weights("base_model_saved_weights")
+            self.ids_from_chars = tf.keras.layers.experimental.preprocessing.StringLookup(
+                        vocabulary=['*', '_', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'], mask_token=None)
+
+            self.chars_from_ids = tf.keras.layers.experimental.preprocessing.StringLookup(
+                        vocabulary=self.ids_from_chars.get_vocabulary(), invert=True, mask_token=None)
         else:
             self.model = model
 
@@ -52,7 +57,9 @@ class RnnWordPlausibilityEvaluator:
         return predicted_chars, states
 
     def p_of_letter(self, normalized_probs, letter):
-        return (tf.squeeze(normalized_probs)[self.ids_from_chars(letter).numpy()]).numpy()
+        probs = tf.squeeze(normalized_probs)
+        index = self.ids_from_chars(tf.convert_to_tensor(letter)).numpy()
+        return probs[index].numpy()
 
     def is_plausible(self, word, show_work=False):
         threshold = 0.3 + 0.2 * max((len(word) - 5), 0)
