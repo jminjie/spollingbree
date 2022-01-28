@@ -270,7 +270,7 @@ function updateScoreboard() {
     var delayedSetPoints = false;
 
     for (let i = 0; i < RANK_THRESHOLDS.length; i++) {
-        if (prevPoints <= RANK_THRESHOLDS[i] && points > RANK_THRESHOLDS[i]) {
+        if (prevPoints < RANK_THRESHOLDS[i] && points >= RANK_THRESHOLDS[i]) {
             delayedSetPoints = true;
             $('#points').animate({'opacity': 0}, 300, function(){
                 setRankLine(i);
@@ -291,7 +291,7 @@ function updateScoreboard() {
 
     let highestThreshold = RANK_THRESHOLDS[RANK_THRESHOLDS.length - 1];
 
-    if (prevPoints <= highestThreshold && points > highestThreshold) {
+    if (prevPoints < highestThreshold && points >= highestThreshold) {
         const jsConfetti = new JSConfetti();
         jsConfetti.addConfetti();
     }

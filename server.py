@@ -17,7 +17,9 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def root():
-    return render_template('index.html', totalPlausibleWords=totalPlausibleWords,
+    return render_template('index.html',
+            totalPlausibleWords=totalPlausibleWords,
+            totalAttempts=totalAttempts,
             displayDate = dl.getDisplayDate())
 
 @app.route('/try/<word>', methods=['POST'])
