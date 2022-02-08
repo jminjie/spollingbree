@@ -1,6 +1,6 @@
 # Spolling Bree
 
-Spolling Bree is a version of the NYT Spelling Bee game that only accpets fake
+Spolling Bree is a version of the NYT Spelling Bee game that only accepts fake
 words that are plausible.
 
 ## Model
