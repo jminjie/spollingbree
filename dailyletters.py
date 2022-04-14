@@ -1,8 +1,8 @@
 from datetime import datetime, timezone
-import wget
 import pytz
 import os
 import calendar
+import urllib.request
 
 class DailyLetters:
     def __init__(self, logger):
@@ -52,7 +52,14 @@ class DailyLetters:
         self.logger.warning('Disk cache miss in getDailyLetters, downloading.')
         url = 'https://www.nytimes.com/{}/crosswords/spelling-bee-forum.html'.format(date)
         self.logger.warning('Attempting download from {}'.format(url))
-        filename = wget.download(url, out=self.TEMP_DIR)
+
+        opener=urllib.request.build_opener()
+        opener.addheaders=[('User-Agent','Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')]
+        urllib.request.install_opener(opener)
+
+        # TODO saves it to /tmp
+        filename, _ = urllib.request.urlretrieve(url)
+
         with open(self.DATE_FILE, 'w') as f:
             f.write(date);
 
