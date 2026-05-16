@@ -128,4 +128,4 @@ class DailyLetters:
                 except FileNotFoundError:
                     self.logger.error('Expected to find cached letters but could not.');
 
-        return self.__getLettersFromReddit()
+        return self.__getLettersFromFile(self.__downloadFileIfNeeded())
