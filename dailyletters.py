@@ -38,6 +38,46 @@ class DailyLetters:
         now = datetime.now(timezone)
         return '{0} {1}, {2}'.format(calendar.month_name[now.month], now.day, now.year)
 
+    def __downloadFileIfNeeded(self):
+        date = self.getDate()
+        if self.__alreadyDownloadedToday(date):
+            if self.__lastDownloadedFileName != '':
+                return self.__lastDownloadedFileName
+            else:
+                try:
+                    self.__lastDownloadedFileName = self.__loadLastDownloadedFileName()
+                    return self.__lastDownloadedFileName
+                except FileNotFoundError:
+                    self.logger.error('Expected to find cached filename but could not.');
+
+        if not os.path.exists(self.TEMP_DIR):
+                os.makedirs(self.TEMP_DIR)
+        self.logger.warning('Disk cache miss in getDailyLetters, downloading.')
+        # This is a Spelling Bee clone with a less restrictive scraping policy
+        url = 'https://www.sbsolver.com/answers'
+        self.logger.warning('Attempting download from {}'.format(url))
+
+        opener=urllib.request.build_opener()
+        opener.addheaders=[('User-Agent','Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')]
+        urllib.request.install_opener(opener)
+
+        # TODO saves it to /tmp
+        filename, _ = urllib.request.urlretrieve(url)
+
+        with open(self.DATE_FILE, 'w') as f:
+            f.write(date);
+
+        self.__saveLastDownloadedFileName(filename)
+        return filename
+
+    def __loadLastDownloadedFileName(self):
+        with open(self.LAST_DOWNLOADED_FILE, 'r') as f:
+            return f.read()
+
+    def __saveLastDownloadedFileName(self, filename):
+        with open(self.LAST_DOWNLOADED_FILE, 'w') as f:
+            return f.write(filename)
+
     def __loadCachedLetters(self):
         with open(self.CACHED_LETTERS_FILE, 'r') as f:
             return f.read()
@@ -57,9 +97,20 @@ class DailyLetters:
         except FileNotFoundError:
             return False
 
-    def __getLettersFromReddit(self):
-        today = date.today()
-        date_str = today.strftime("%B %-d, %Y")  # e.g. "May 15, 2026"
+    def __getLettersFromFile(self, filename):
+        MARKER = 'alt="center letter'
+        # sbsolver includes a line with the daily letters which looks like
+        #
+        # alt="center letter M" /><a href="https://www.sbsolver.com/s/mAcginp"
+        markedString = ''
+        with open(filename, 'r') as fopen:
+            for line in fopen:
+                if MARKER in line:
+                    index = line.find(MARKER);
+                    markedString = line[index:index+100]
+                    break
+        print(markedString)
+        letters = markedString[60:67]
 
         url = "https://www.reddit.com/r/NYTSpellingBee/.json"
         headers = {"User-Agent": "spelling-bee-scraper/1.0"}
