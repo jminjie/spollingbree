@@ -111,31 +111,10 @@ class DailyLetters:
                     break
         print(markedString)
         letters = markedString[60:67]
-
-        url = "https://www.reddit.com/r/NYTSpellingBee/.json"
-        headers = {"User-Agent": "spelling-bee-scraper/1.0"}
-
-        response = requests.get(url, headers=headers, timeout=10)
-        response.raise_for_status()
-
-        posts = response.json()["data"]["children"]
-        for post in posts:
-            title = post["data"]["title"]
-            if date_str in title:
-                match = re.search(r'\(([A-Za-z])\)\s*([A-Za-z\s]+)', title)
-                if match:
-                    center = match.group(1)
-                    others = match.group(2).split()
-                    letters = "".join([center] + others).lower()
-                    # save to cache and file
-                    self.__cachedLetters = letters
-                    self.__saveCachedLetters(letters)
-                    with open(self.DATE_FILE, 'w') as f:
-                        f.write(self.getDate());
-                    return letters
-
-
-        raise ValueError(f"No Reddit post found for {date_str}")
+        # save to cache and file
+        self.__cachedLetters = letters
+        self.__saveCachedLetters(letters)
+        return letters
 
     def getDailyLetters(self):
         if self.__alreadyDownloadedToday(self.getDate()):
