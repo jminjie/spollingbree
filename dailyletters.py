@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from datetime import date
 import pytz
 import os
 import calendar
@@ -50,7 +51,8 @@ class DailyLetters:
         if not os.path.exists(self.TEMP_DIR):
                 os.makedirs(self.TEMP_DIR)
         self.logger.warning('Disk cache miss in getDailyLetters, downloading.')
-        url = 'https://www.nytimes.com/{}/crosswords/spelling-bee-forum.html'.format(date)
+        # This is a Spelling Bee clone with a less restrictive scraping policy
+        url = 'https://spellbee.org/'
         self.logger.warning('Attempting download from {}'.format(url))
 
         opener=urllib.request.build_opener()
@@ -94,19 +96,20 @@ class DailyLetters:
             return False
 
     def __getLettersFromFile(self, filename):
-        MARKER = 'Center letter is in'
+        MARKER = date.today().strftime("%Y-%m-%d")
+        # SpellBee.org includes a line with the current date and the daily letters which looks like
+        # this
+        #
+        # 2026-05-15":{"id":1312,"date":"2026-05-15","data":{"code":"gaciknp
         markedString = ''
         with open(filename, 'r') as fopen:
             for line in fopen:
                 if MARKER in line:
                     index = line.find(MARKER);
-                    markedString = line[index:index+200]
+                    markedString = line[index:index+100]
                     break
-        # subString is of the form 'Y</strong> A B D L O'
-        subString = markedString[141:163]
-
-        letters = subString[0] + subString[11] + subString[13] + subString[15] + \
-                subString[17] + subString[19] + subString[21]
+        print(markedString)
+        letters = markedString[59:66]
 
         # save to cache and file
         self.__cachedLetters = letters
