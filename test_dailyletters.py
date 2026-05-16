@@ -3,3 +3,4 @@ import logging
 
 dl = DailyLetters(logging)
 print(dl.getDate())
+print(dl.getDailyLetters())
