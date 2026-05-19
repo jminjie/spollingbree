@@ -4,3 +4,4 @@ __pycache__*
 records/*
 temp/*
 .ipynb_checkpoints
+venv/*

@@ -320,3 +320,35 @@ hr {
     text-transform: uppercase;
     font-weight: bold
 }
+
+@media (max-width: 768px) {
+    .content {
+        width: 95%;
+        padding: 1em;
+    }
+
+    .row {
+        flex-direction: column;
+    }
+
+    .game-column {
+        order: 2;
+    }
+
+    .scoreboard-column {
+        order: 1;
+    }
+
+    #scoreboard, #score {
+        width: 100%;
+    }
+
+    #wordbox {
+        height: auto;
+        min-height: 200px;
+    }
+
+    #game {
+        margin: 0;
+    }
+}

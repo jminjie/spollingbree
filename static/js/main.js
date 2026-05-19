@@ -299,6 +299,12 @@ function updateScoreboard() {
     prevPoints = points;
 }
 
+function typeLetter(id) {
+    let letter = $('#' + id).text().toLowerCase();
+    $('#wordinput').val($('#wordinput').val() + letter);
+    $('#wordinput').focus();
+}
+
 function shuffle(array) {
   let currentIndex = array.length,  randomIndex;
 
